@@ -1,0 +1,15 @@
+build
+tests/media/CACHE
+tests/media/custom
+tests/media/js/066cd253eada.js
+dist
+MANIFEST
+*.pyc
+*.egg-info
+.tox/
+*.egg
+docs/_build/
+.coverage
+htmlcov
+.sass-cache
+.idea

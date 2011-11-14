@@ -1,0 +1,6 @@
+<script type="text/javascript">
+    $LAB
+    {% for js in libraries %}
+        .queueScript("{{ js }}")
+    {% endfor %}
+</script>
