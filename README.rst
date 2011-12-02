@@ -12,19 +12,14 @@ Usage
 =====
 
 {% labjs %}
-<script type="text/html" src="src/myjs.js" />
-{% endlabjs &}
-
-
+<script type="text/javascript" src="src/myjs.js" />
+{% wait %}
+<script type="text/javascript">
+... inline script
 <script>
-{% labwait %}
+
+{% endlabjs %}
 
 
-
-{% endlabwait %}
-</script>
-
-<script>
-{% labfooter %}
-
-{% endlabfooter %}
+{% runlab %}
+{% endrunlab %}
