@@ -10,3 +10,4 @@ class LabjsConf(AppConf):
 
     # Main switch
     ENABLED = not settings.DEBUG
+    DEBUG_TOGGLE = "labjs"
