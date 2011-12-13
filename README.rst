@@ -38,9 +38,10 @@ queuing features::
 
 
     $LAB
-	    .queueScript("script1.js") // script1, script2, and script3 do not depend on each other,
-        .queueScript("script2.js") // so execute in any order
+	    .queueScript("script1.js") // script1, script2, and script3 do not depend on each other
+	    .queueScript("script2.js") // so execute in any order
 	    .queueScript("script3.js")
+
 	    .queueWait(function(){  // can still have executable wait(...) functions if you need to
 	        alert("Scripts 1-3 are loaded!");
 	    })
@@ -60,7 +61,7 @@ Installation
 
 Currently available only on github, install using pip::
 
-    ``pip install -e git+git://github.com/ashwoods/django-labjs.git``
+    pip install -e git+git://github.com/ashwoods/django-labjs.git
 
 
 Usage
