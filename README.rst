@@ -63,6 +63,10 @@ Currently available only on github, install using pip::
 
     pip install -e git+git://github.com/ashwoods/django-labjs.git
 
+Add ``labJS`` to ``INSTALLED_APPS`` in your ``settings.py`` file.
+* Notice the upper JS.
+
+Set ``LABJS_ENABLED`` to ``True`` if you want to enable *labifying*.
 
 Usage
 -----
@@ -72,6 +76,8 @@ templatetags, and wrap javascript imports AND any javascript inlines that depend
 ``{% labjs %}`` and ``{% endlabjs %}`` tags. Use ``{% wait %}`` tags to insert an empty ``queuewait()``
 
 Usage example::
+
+    {% load labjs %}
 
     <script type="text/javascript" src="{{ STATIC_URL}}labjs/LAB.min.js"></script>
 
