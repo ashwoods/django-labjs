@@ -1,11 +1,10 @@
 from django import template
 from django.core.exceptions import ImproperlyConfigured
-
-#rom compressor.cache import (cache_get, cache_set, get_offline_hexdigest,
-#                             get_offline_manifest, get_templatetag_cachekey)
 from labJS.conf import settings
 from labJS.base import Labjs
 from django.utils.safestring import mark_safe
+from django.template.base import Token, TOKEN_TEXT
+from django.template import NodeList
 
 register = template.Library()
 
@@ -24,14 +23,11 @@ class LabjsNode(template.Node):
 
     def render(self, context):
         #Check if in debug mode
-        if self.debug_mode(context) or settings.LABJS_ENABLED:
+        if self.debug_mode(context) or not settings.LABJS_ENABLED:
             return self.nodelist.render(context)
-
 
         # call compressor output method and handle exceptions
         rendered_output = Labjs(content=self.nodelist.render(context),context=context).render_output()
-        #if cache_key:
-        #    cache_set(cache_key, rendered_output)
         return rendered_output
 
 
@@ -59,31 +55,51 @@ def labjs(parser, token):
 
     {% endlabjs %}
 
-
     Which would be rendered something like::
 
      <script type="text/javascript">$LAB.queueScript("/static/js/jquery-1.5.2.min.js").queueScript("/static/js/jquery.formset.min.js").queueScript("/jsi18n/")</script>
 
     """
-    chunks = []
+    nodelist = NodeList()
     while True:
-        nodelist = parser.parse(('wait',')
-        chunks.append(nodelist)
+        chunk = parser.parse(('endlabjs','wait'))
+        ptoken = parser.next_token()
 
-    ptoken = parser.next_token()
-    if ptoken.contents == 'wait':
-        print ptokn
-    else:
-        parser.delete_first_token()
+        if ptoken.contents == 'wait':
+            chunk.append(Wait())
+            nodelist.extend(chunk)
+        elif ptoken.contents == 'endlabjs':
+            #parser.delete_first_token()
+            nodelist.extend(chunk)
+            break
+
     return LabjsNode(nodelist)
 
 
-#@register.simple_tag(takes_context=True)
-#def wait(context):
-#    """
-#    Renders an empty labjs queue
-#    """
-#    return '<script type="text/javascript"></script>' #TODO: make this prettier
+
+class Wait(template.Node):
+    def debug_mode(self, context):
+        if settings.LABJS_DEBUG_TOGGLE:
+        # Only check for the debug parameter
+        # if a RequestContext was used
+            request = context.get('request', None)
+            if request is not None:
+                return settings.LABJS_DEBUG_TOGGLE in request.GET
+
+    def render(self, context):
+        #TODO: implement check
+        return '<script type="text/javascript"></script>'
+
+
+@register.simple_tag(takes_context=True)
+def runlabjs(context):
+    """
+    Renders an empty labjs queue
+    """
+    return """<script type="text/javascript">
+        $LAB
+	    .runQueue();
+    </script>""" #TODO: make this prettier
 
 
 

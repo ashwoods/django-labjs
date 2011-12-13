@@ -9,7 +9,7 @@ from django.utils.safestring import mark_safe
 
 class Labjs(object):
     """
-    Renders
+    Parses html for javascript elements and returns the LabJS html.
     """
 
     def __init__(self, content=None, context=None, type=None, *args, **kwargs):
@@ -23,6 +23,9 @@ class Labjs(object):
 
     @property
     def split_contents(self):
+        """
+        Parses html for javascript
+        """
         if self.queue:
             return self.queue
         for elem in self.parser.js_elems():
@@ -39,6 +42,7 @@ class Labjs(object):
 
     def render_output(self, context=None):
         """
+        Renders the LabJS output
         """
         if context is None:
             context = {}
