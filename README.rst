@@ -38,20 +38,21 @@ queuing features::
 
 
     $LAB
-	.queueScript("script1.js") // script1, script2, and script3 do not depend on each other,
-    .queueScript("script2.js") // so execute in any order
-	.queueScript("script3.js")
-	.queueWait(function(){  // can still have executable wait(...) functions if you need to
-	    alert("Scripts 1-3 are loaded!");
-	})
-	.queueScript("script4.js") // depends on script1, script2 and script3 being executed before
-	.queueWait(function(){script4Func();});
-	// ...
+	    .queueScript("script1.js") // script1, script2, and script3 do not depend on each other,
+        .queueScript("script2.js") // so execute in any order
+	    .queueScript("script3.js")
+	    .queueWait(function(){  // can still have executable wait(...) functions if you need to
+	        alert("Scripts 1-3 are loaded!");
+	    })
+	    .queueScript("script4.js") // depends on script1, script2 and script3 being executed before
+	    .queueWait(function(){script4Func();});
+
+
+And somewhere close to the closing ``</body>`` tag::
+
+
 	$LAB
 	    .runQueue() // execute the queue as a $LAB chain
-
-
-
 
 
 Installation
