@@ -91,11 +91,12 @@ Usage example::
     // You have to place any inline javascript that depends on any of the Labified scripts
     // under a labjs templatetag. It will automatically place it under a queueWait.
 
+    {% compress js %} // you can use compress tags too inside.
     <script type="text/javascript">
     ...
     ...
     <script>
-
+    {% endcompress %}
     {% endlabjs %}
 
     ...
@@ -121,9 +122,11 @@ Tips
 ----
 
 
-When using labjs, labjs ensures that the javascript you need has already ran through the use
-of waits. This functionality is normally achieved by using shortcut functions like jquery's ``$.ready()``.
-When using labjs, however, ready() is not only needed, but might be slightly counterproductive.
+When using labjs, labjs ensures that the javascript you need has already loaded and executed with the use
+of ``wait()`` or in our case, ``queuewait()``. This functionality is normally achieved by using shortcut functions
+like jquery's ``$.ready()``.
+
+When using labjs, however, ``ready()`` might not be required, and could be slightly counterproductive.
 ``$.ready()`` waits for browser dom ready, which you need if you are going to be doing dom interaction.
 Otherwise, it might not be necessary. For more information, read this stack `answer`_.
 
