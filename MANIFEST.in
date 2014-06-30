@@ -1,0 +1,3 @@
+include setup.py README.rst
+recursive-include labJS/templates *
+recursive-include labJS/static *
