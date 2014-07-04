@@ -22,6 +22,7 @@ setup(
         'django-appconf >= 0.4',
         'django-compressor >= 0.9.2',
     ],
+    test_suite='runtests.runtests',
     include_package_data=True,
     zip_safe=False,  # because we're including media that Django needs
     classifiers=[
