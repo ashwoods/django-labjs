@@ -6,7 +6,7 @@ from compressor.utils import get_class
 from compressor.utils.decorators import cached_property
 from django.template import Context
 from django.template.loader import render_to_string
-from django.utils.encoding import smart_unicode
+from django.utils.encoding import smart_text
 from django.utils.safestring import mark_safe
 
 
@@ -24,7 +24,6 @@ class Labjs(object):
     def parser(self):
         return get_class(settings.COMPRESS_PARSER)(self.content)
 
-    @property
     def split_contents(self):
         """
         Parses html for javascript
@@ -60,8 +59,8 @@ class Labjs(object):
         final_context.update(self.context)
         final_context.update(context)
 
-        inner_content = smart_unicode("")
-        queue = self.split_contents
+        inner_content = smart_text('')
+        queue = self.split_contents()
 
         for js in queue:
             if js['type'] == 'script':
