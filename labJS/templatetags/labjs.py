@@ -23,6 +23,7 @@ class LabjsNode(template.Node):
             request = context.get('request', None)
             if request is not None:
                 return settings.LABJS_DEBUG_TOGGLE in request.GET
+        return False
 
     def render(self, context):
         # Check if in debug mode
@@ -35,6 +36,13 @@ class LabjsNode(template.Node):
             context=context
         ).render_output()
         return rendered_output
+
+
+class Wait(template.Node):
+
+    def render(self, context):
+        # TODO: implement check
+        return '<script type="text/javascript"></script>'
 
 
 @register.tag
@@ -94,23 +102,8 @@ def labjs(parser, token):
     return LabjsNode(nodelist)
 
 
-class Wait(template.Node):
-
-    def debug_mode(self, context):
-        if settings.LABJS_DEBUG_TOGGLE:
-            # Only check for the debug parameter
-            # if a RequestContext was used
-            request = context.get('request', None)
-            if request is not None:
-                return settings.LABJS_DEBUG_TOGGLE in request.GET
-
-    def render(self, context):
-        # TODO: implement check
-        return '<script type="text/javascript"></script>'
-
-
-@register.simple_tag(takes_context=True)
-def runlabjs(context):
+@register.simple_tag
+def runlabjs():
     """
     Renders an empty labjs queue
     """
