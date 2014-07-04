@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django import template
 from django.test import TestCase
 from django.test.client import RequestFactory
 from django.test.utils import override_settings
 
 from labJS.base import Labjs
-from labJS.templatetags.labjs import LabjsNode
+from labJS.templatetags.labjs import LabjsNode, Wait
 
 
 class FakeNode(object):
@@ -38,6 +39,14 @@ class TestLabjs(TestCase):
             lab.split_contents(),
             [{'data': '/static/script.js', 'type': 'script'}]
         )
+
+    def test_render_output_inline_contains_script(self):
+        lab = Labjs('<script>document.write("Hello world");</script>')
+        self.assertIn('document.write("Hello world");', lab.render_output())
+
+    def test_render_output_script_contains_src(self):
+        lab = Labjs('<script src="/static/script.js"></script>')
+        self.assertIn('/static/script.js', lab.render_output())
 
 
 class TestLabjsNode(TestCase):
@@ -79,3 +88,19 @@ class TestLabjsNode(TestCase):
             'request': RequestFactory().get('/?labjs='),
         }
         self.assertEqual(node.render(context), 'some content')
+
+
+class TestWaitNode(TestCase):
+
+    def test_wait_node_renders_as_empty_script(self):
+        self.assertHTMLEqual(
+            Wait().render(template.Context({})),
+            '<script type="text/javascript"></script>'
+        )
+
+
+class TestTemplateTags(TestCase):
+
+    def test_runlabjs_output_includes_runQueue(self):
+        t = template.Template('{% load labjs %}{% runlabjs %}')
+        self.assertIn('runQueue', t.render(template.Context({})))

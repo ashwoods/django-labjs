@@ -17,7 +17,7 @@ class Labjs(object):
 
     def __init__(self, content=None, context=None, type=None, *args, **kwargs):
         self.content = content
-        self.context = context
+        self.context = context or {}
         self.queue = []
 
     @cached_property
