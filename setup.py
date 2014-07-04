@@ -8,7 +8,7 @@ VERSION = open('VERSION').read().lstrip('version: ').rstrip('\n')
 setup(name='django-labjs',
         packages=find_packages(),
 
-        version='0.1.1-dev',
+        version=VERSION,
         description='Django labjs templatetags.',
         long_description=open('README.rst').read(),
         author='Ashley Camba Garrido',
