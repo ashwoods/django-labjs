@@ -1,9 +1,12 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+from compressor.conf import settings
+from compressor.utils import get_class
+from compressor.utils.decorators import cached_property
 from django.template import Context
 from django.template.loader import render_to_string
 from django.utils.encoding import smart_unicode
-from compressor.utils.decorators import cached_property
-from compressor.utils import get_class
-from compressor.conf import settings
 from django.utils.safestring import mark_safe
 
 
@@ -32,12 +35,19 @@ class Labjs(object):
             attribs = self.parser.elem_attribs(elem)
             if 'src' in attribs:
                 basename = attribs['src']
-                self.queue.append({'data':basename,'type':'script'})
+                self.queue.append({
+                    'data': basename,
+                    'type': 'script',
+                })
             else:
+                # TODO: fix this evil fix when compressor bug fixed
                 content = self.parser.elem_content(elem)
-                if content == "None": #TODO fix this evil fix when compressor bug fixed
+                if content == "None":
                     content = ""
-                self.queue.append({'data':content, 'type':'inline'})
+                self.queue.append({
+                    'data': content,
+                    'type': 'inline',
+                })
         return self.queue
 
     def render_output(self, context=None):
@@ -55,11 +65,15 @@ class Labjs(object):
 
         for js in queue:
             if js['type'] == 'script':
-                rendered = mark_safe(render_to_string("labjs/labjs.html", {'js':js['data']}))
+                rendered = mark_safe(render_to_string(
+                    'labjs/labjs.html', {'js': js['data']}
+                ))
                 inner_content += rendered
             else:
-                rendered = render_to_string("labjs/wait.html",  {'js':mark_safe(js['data'])})
+                rendered = render_to_string(
+                    'labjs/wait.html',  {'js': mark_safe(js['data'])}
+                )
                 inner_content += rendered
 
-        final_context.update({'js':mark_safe(inner_content)})
-        return render_to_string("labjs/header.html", final_context)
+        final_context.update({'js': mark_safe(inner_content)})
+        return render_to_string('labjs/header.html', final_context)
