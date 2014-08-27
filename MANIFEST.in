@@ -1,0 +1,8 @@
+include AUTHORS
+include VERSION
+include LICENSE
+include README.rst
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+recursive-include labJS/templates *
+recursive-include labJS/static *

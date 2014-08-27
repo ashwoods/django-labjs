@@ -1,12 +1,11 @@
-from django import VERSION as DJANGO_VERSION
-from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 
 from appconf import AppConf
+from django.conf import settings  # noqa
 
 
 class LabjsConf(AppConf):
 
-    # Main switch
     ENABLED = not settings.DEBUG
-    DEBUG_TOGGLE = "labjs"
+    DEBUG_TOGGLE = 'labjs'
